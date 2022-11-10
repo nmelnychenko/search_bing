@@ -3,12 +3,12 @@ from bs4 import BeautifulSoup
 from decouple import config
 
 subscription_key = config('subscription_key', default='')
-print(subscription_key)
-def laptop_bing_search():
+
+def laptop_bing_search(query='laptop game ssd rtx2060'):
 
   search_url = "https://api.bing.microsoft.com/v7.0/search/"
 
-  search_term = 'ноутбук 16Гб + SSD + 50000 + Україна -site:.ru'
+  search_term = f'{query} -site:.ru'
   search_term = search_term.rstrip()
 
   # Copied from the Bing documentation on page
@@ -22,8 +22,8 @@ def laptop_bing_search():
   pages = search_results['webPages']
   results = pages['value']
 
-  def is_meta_description(tag):
-      return tag.name == 'meta' and tag['name'] == 'description'
+  # def is_meta_description(tag):
+  #     return tag.name == 'meta' and tag['name'] == 'description'
 
   output_data = []
   for result in results[:10]:
@@ -52,5 +52,6 @@ def laptop_bing_search():
       print("Something went wrong")
     else:
       continue
-  return output_data
 
+  print(output_data)
+  return output_data

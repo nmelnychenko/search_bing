@@ -8,6 +8,16 @@ app = Bottle()
 def index():
     return open('index.html').read()
 
+# OUR SEARCHRESULTS
+@app.route('/search')
+def index():
+    query = request.query['query']
+    search_results = laptop_bing_search(query)
+    print(search_results)
+    # query = laptop_bing_search(request.query['query'])
+    # print(query)
+    return template(open('search.html').read(), results=search_results)
+
 # # OUR STATIC FILES
 # @app.route('/css/<filename>')
 # def server_static(filename):
@@ -23,7 +33,7 @@ def index():
 # def server_static(filename):
 #     print('Image Served')
 #     return static_file(filename, root='website/images')
-laptop_bing_search()
+
 # RUNNING OUR SERVER
 print('Serving on http://localhost:8080')
 
