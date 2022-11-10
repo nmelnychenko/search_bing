@@ -28,7 +28,22 @@
                 </div>
               </form>
               <div class="output">
-                
+                <ul>
+                  % for row in results:
+                  <li class="search-result">
+                    <div class="search-result-heading">
+                      <a href="{{row['url']}}"><span>{{row['title']}}</span></a
+                      >
+                    </div>
+                    <div class="search-result-text">
+                        {{row['summary']}}
+                    </div>
+                    <div class="search-result-data">
+                        {{row['data']}}
+                    </div>
+                  </li>
+                  % end
+                </ul>
               </div>
         </div>   
     </main>
