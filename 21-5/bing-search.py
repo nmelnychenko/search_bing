@@ -1,11 +1,12 @@
 import requests
+from bs4 import BeautifulSoup
 from decouple import config
 
 subscription_key = config('subscription_key', default='')
 
-search_url = "https://api.bing.microsoft.com/v7.0/search"
+search_url = "https://api.bing.microsoft.com/v7.0/search/"
 
-search_term = 'ноутбук 16Гб + SSD + Acer + 50000 + Україна'
+search_term = 'ноутбук 16Гб + SSD + 50000 + Україна -site:.ru'
 search_term = search_term.rstrip()
 
 # Copied from the Bing documentation on page
@@ -19,12 +20,34 @@ search_results = response.json()
 pages = search_results['webPages']
 results = pages['value']
 
-print(type(results))
+def is_meta_description(tag):
+    return tag.name == 'meta' and tag['name'] == 'description'
 
-for elem in search_results:
-  print(elem)
-  # single_res = results[elem]
-  # text = single_res['snippet']
+for result in results[:10]:
+  url = result['url']
 
-  # print(text)
+  try:
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    title = soup.find('title').get_text()
+
+    # TODO: define what content from the page we want to parse
+
+    # TODO: fix the errors with description.
+    # Probably some sites don't have this or define description in different ways
+
+    # meta_tag = soup.find(is_meta_description)
+    # meta_description = meta_tag['content']
+
+    possible_output = {
+      'url': url,
+      'title': title,
+      # 'meta_description': meta_description
+    }
+
+    print(possible_output)
+  except:
+    print("Something went wrong")
+  else:
+    continue
 
